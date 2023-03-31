@@ -1,30 +1,20 @@
-import Koa from 'koa';
-import SpotifyWebApi from 'spotify-web-api-js';
+import express, { Application, Request, Response, NextFunction } from 'express';
+import SpotifyWebApi from 'spotify-web-api-node'
 
-// Initialize Spotify API client
-const spotifyApi = new SpotifyWebApi();
-spotifyApi.setAccessToken('YOUR_ACCESS_TOKEN_HERE');
+const app: Application = express();
 
-async function main() {
-  // Create a Koa app
-  const app = new Koa();
-
-  // Add a route to get a user's playlists
-  app.use(async (ctx) => {
-/*     const body  = await spotifyApi.getUserPlaylists('user_id');
-    ctx.body = body; */
-    ctx.body = 'heyyyy'
-  });
-
-  // Start the server
-  const port = process.env.PORT || 3000;
-  app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-  });
-}
-
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
+const spotifyApi = new SpotifyWebApi({
+    clientId: 'YOUR_CLIENT_ID',
+    clientSecret: 'YOUR_CLIENT_SECRET',
+    redirectUri: 'http://localhost:3000/callback'
 });
 
+console.log(spotifyApi)
+
+app.get('/', (req: Request, res: Response, next: NextFunction) => {
+  res.send('Hello, World!');
+});
+
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
+});
